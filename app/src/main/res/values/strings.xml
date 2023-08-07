@@ -1,0 +1,54 @@
+<resources>
+    <!--Application-->
+    <string name="app_name">ComposeNotes</string>
+
+    <!--Search Screen-->
+    <string name="search_screen_title">Search</string>
+
+
+    <!--Top App Bar-->
+    <string name="top_bar_title_selected">Selected</string>
+
+    <!--Loading-->
+    <string name="loading_title">Loading…</string>
+
+    <!--Sign In-->
+    <string name="auth_password_hint">Password</string>
+    <string name="auth_repeat_password_hint">Repeat password</string>
+    <string name="auth_login_hint">Login</string>
+    <string name="auth_name_hint">Username</string>
+    <string name="auth_button_continue">Continue</string>
+    <string name="auth_title_variant">or</string>
+    <string name="auth_title_sign_in">Sign In</string>
+    <string name="auth_title_sign_up">Sign Up</string>
+
+    <string name="sign_in_login_title">Notes</string>
+    <string name="sign_in_login_description">Sign in or create an account</string>
+    <string name="sign_in_password_title">Keep your info\nprivate</string>
+    <string name="sign_in_password_title_second">It just works</string>
+    <string name="sign_in_password_description">Enter your password</string>
+    <string name="sign_in_button_enter">Enter</string>
+
+    <!--Sign Up-->
+    <string name="sign_up_login_title">Registration</string>
+    <string name="sign_up_login_description">Come up with a unique login to create an account</string>
+    <string name="sign_up_login_field_description">Only latin letters, numbers, no spaces are allowed in login</string>
+    <string name="sign_up_login_field_description_length">Length must be in 2 – 16</string>
+    <string name="sign_up_name_title">Enter your name</string>
+    <string name="sign_up_name_title_second">Use your imagination</string>
+    <string name="sign_up_name_title_avatar">Your avatar</string>
+    <string name="sign_up_name_description">What is your name?</string>
+    <string name="sign_up_name_field_description">Optional</string>
+    <string name="sign_up_login_button">Take a login</string>
+    <string name="sign_up_password_title">Almost done</string>
+    <string name="sign_up_password_title_second">Soon you will be using the app</string>
+    <string name="sign_up_password_description">Create a password and repeat it</string>
+    <string name="sign_up_password_field_description_size">Length must be in 8 – 32</string>
+    <string name="sign_up_password_field_description_digits">Length must have digits</string>
+    <string name="sign_up_password_field_description_capitalized">Length must have capital letters</string>
+    <string name="sign_up_password_field_description_whitespaces">Length must have no whitespaces</string>
+    <string name="sign_up_password_field_description_mismatch">Password mismatch</string>
+    <string name="sign_up_name_button">Take a name</string>
+    <string name="sign_up_password_button">Create account</string>
+
+</resources>
