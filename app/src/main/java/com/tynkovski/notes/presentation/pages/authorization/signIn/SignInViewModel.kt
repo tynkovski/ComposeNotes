@@ -5,19 +5,12 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.orbitmvi.orbit.ContainerHost
-import org.orbitmvi.orbit.syntax.simple.intent
-import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
-enum class SignInTab {
-    Login, Password
-}
-
-class SignInViewModel : ViewModel(),
-    ContainerHost<SignInViewModel.State, SignInViewModel.SideEffect> {
-    override val container = container<State, SideEffect>(
-        State(tab = SignInTab.Login, loading = false)
-    )
+class SignInViewModel(
+    // private val authRepository: IAuthRepository,
+) : ViewModel(), ContainerHost<SignInViewModel.State, SignInViewModel.SideEffect> {
+    override val container = container<State, SideEffect>(State(loading = false))
 
     private val _inputState = MutableStateFlow(SignInInputState())
     val input = _inputState.asStateFlow()
@@ -30,22 +23,24 @@ class SignInViewModel : ViewModel(),
         _inputState.value = _inputState.value.copy(password = password)
     }
 
-    fun toPasswordTab() = intent {
-        reduce { state.copy(tab = SignInTab.Password) }
+    fun enter() {
+//        authRepository
+//            .login(
+//                input.value.login.text,
+//                input.value.password.text,
+//            )
+//            .onSuccess {
+//                Log.d("Auth", "Success")
+//            }
+//            .onError {
+//                Log.d("Auth", "Error ${it.message}")
+//            }
+//            .collect()
     }
 
-    fun toLoginTab() = intent {
-        reduce { state.copy(tab = SignInTab.Login) }
+    class State(val loading: Boolean)
+
+    sealed interface SideEffect {
+        object UserLogin: SideEffect
     }
-
-    fun enter() = intent {
-        // todo login via backend
-    }
-
-    data class State(
-        val tab: SignInTab,
-        val loading: Boolean
-    )
-
-    sealed interface SideEffect
 }

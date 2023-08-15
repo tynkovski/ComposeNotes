@@ -1,25 +1,17 @@
 package com.tynkovski.notes.presentation.pages.authorization.signUp
 
-import android.util.Log
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import org.orbitmvi.orbit.ContainerHost
-import org.orbitmvi.orbit.syntax.simple.intent
-import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
-
-enum class SignUpTab {
-    Login, Name, Password
-}
 
 class SignUpViewModel(
     //private val authRepository: IAuthRepository,
 ) : ViewModel(),
     ContainerHost<SignUpViewModel.State, SignUpViewModel.SideEffect> {
-    override val container = container<State, SideEffect>(State(tab = SignUpTab.Login))
+    override val container = container<State, SideEffect>(State(loading = false))
 
     private val _inputState = MutableStateFlow(SignUpInputState())
     val input = _inputState.asStateFlow()
@@ -40,19 +32,7 @@ class SignUpViewModel(
         _inputState.value = _inputState.value.copy(repeatedPassword = repeatedPassword)
     }
 
-    fun toLoginTab() = intent {
-        reduce { state.copy(tab = SignUpTab.Login) }
-    }
-
-    fun toNameTab() = intent {
-        reduce { state.copy(tab = SignUpTab.Name) }
-    }
-
-    fun toPasswordTab() = intent {
-        reduce { state.copy(tab = SignUpTab.Password) }
-    }
-
-    fun signUp() = intent {
+    fun signUp() {
 //        authRepository
 //            .register(
 //                input.value.login.text,
@@ -68,9 +48,9 @@ class SignUpViewModel(
 //            .collect()
     }
 
-    data class State(
-        val tab: SignUpTab,
-    )
+    data class State(val loading: Boolean)
 
-    sealed interface SideEffect
+    sealed interface SideEffect {
+        object UserRegister: SideEffect
+    }
 }
