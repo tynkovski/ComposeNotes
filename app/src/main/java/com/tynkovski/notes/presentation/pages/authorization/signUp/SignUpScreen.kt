@@ -71,26 +71,26 @@ fun SignUpScreen(
 
     val pagerState = rememberPagerState()
 
-    fun navigateNext(index: Int) = coroutineScope.launch {
-        pagerState.animateScrollToPage(index + 1)
-    }
-
-    fun navigateBack(index: Int) = coroutineScope.launch {
-        pagerState.animateScrollToPage(index - 1)
-    }
-
     HorizontalPager(
         modifier = maxModifier,
         state = pagerState,
         pageCount = 3,
         userScrollEnabled = false,
     ) {
+        fun nextPage() {
+            coroutineScope.launch { pagerState.animateScrollToPage(it + 1) }
+        }
+
+        fun previousPage() {
+            coroutineScope.launch { pagerState.animateScrollToPage(it - 1) }
+        }
+
         when (it) {
             LOGIN_TAB -> {
                 SignUpLogin(
                     modifier = modifier,
                     backClick = { controller.popBackStack() },
-                    nextScreenClick = { navigateNext(it) },
+                    nextScreenClick = ::nextPage,
                     signInClick = {
                         controller.navigate(route = SignInScreen.route) {
                             popUpTo(
@@ -111,8 +111,8 @@ fun SignUpScreen(
             NAME_TAB -> {
                 SignUpName(
                     modifier = modifier,
-                    backClick = { navigateBack(it) },
-                    nextScreenClick = { navigateNext(it) },
+                    backClick = ::previousPage,
+                    nextScreenClick = ::nextPage,
                     nameInput = input.name,
                     nameInputChanged = viewModel::inputNameChanged,
                     requestFocus = keyboardVisible
@@ -122,7 +122,7 @@ fun SignUpScreen(
             PASSWORD_TAB -> {
                 SignUpPassword(
                     modifier = modifier,
-                    backClick = { navigateBack(it) },
+                    backClick = ::previousPage,
                     signUpClick = viewModel::signUp,
                     passwordInput = input.password,
                     passwordRepeatInput = input.repeatedPassword,

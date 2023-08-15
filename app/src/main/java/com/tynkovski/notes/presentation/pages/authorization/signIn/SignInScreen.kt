@@ -69,27 +69,27 @@ fun SignInScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val pagerState = rememberPagerState()
-
-    fun navigateNext(index: Int) = coroutineScope.launch {
-        pagerState.animateScrollToPage(index + 1)
-    }
-
-    fun navigateBack(index: Int) = coroutineScope.launch {
-        pagerState.animateScrollToPage(index - 1)
-    }
-
+    
     HorizontalPager(
         modifier = maxModifier,
         state = pagerState,
         pageCount = 2,
         userScrollEnabled = false,
     ) {
+        fun nextPage() {
+            coroutineScope.launch { pagerState.animateScrollToPage(it + 1) }
+        }
+
+        fun previousPage() {
+            coroutineScope.launch { pagerState.animateScrollToPage(it - 1) }
+        }
+
         when (it) {
             LOGIN_TAB -> SignInLogin(
                 modifier = modifier,
                 input = input.login,
                 inputChanged = viewModel::inputLoginChanged,
-                nextScreenClick = { navigateNext(it) },
+                nextScreenClick = ::nextPage,
                 signUpClick = {
                     controller.navigate(route = SignUpScreen.route) {
                         popUpTo(
@@ -108,7 +108,7 @@ fun SignInScreen(
                 modifier = modifier,
                 input = input.password,
                 inputChanged = viewModel::inputPasswordChanged,
-                backClick = { navigateBack(it) },
+                backClick = ::previousPage,
                 onEnterClick = viewModel::enter,
                 requestFocus = keyboardVisible
             )
