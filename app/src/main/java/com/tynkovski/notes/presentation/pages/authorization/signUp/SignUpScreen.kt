@@ -89,7 +89,7 @@ fun SignUpScreen(
             LOGIN_TAB -> {
                 SignUpLogin(
                     modifier = modifier,
-                    backClick = { controller.popBackStack() },
+                    backClick = controller::popBackStack,
                     nextScreenClick = ::nextPage,
                     signInClick = {
                         controller.navigate(route = SignInScreen.route) {
