@@ -25,23 +25,10 @@ fun DotsFlashing(
     modifier: Modifier,
     minAlpha: Float,
     delayUnit: Int,
-    dotSize: Dp,
     space: Dp,
+    dotSize: Dp,
     color: Color = MaterialTheme.colorScheme.primary,
 ) {
-    @Composable
-    fun Dot(
-        alpha: Float,
-    ) = Spacer(
-        modifier = modifier
-            .size(dotSize)
-            .alpha(alpha)
-            .background(
-                color = color,
-                shape = CircleShape
-            )
-    )
-
     val infiniteTransition = rememberInfiniteTransition()
 
     @Composable
@@ -69,8 +56,24 @@ fun DotsFlashing(
             alignment = Alignment.CenterHorizontally
         ),
     ) {
-        Dot(alpha1)
-        Dot(alpha2)
-        Dot(alpha3)
+        Dot(modifier, dotSize, color, alpha1)
+        Dot(modifier, dotSize, color, alpha2)
+        Dot(modifier, dotSize, color, alpha3)
     }
 }
+
+@Composable
+private fun Dot(
+    modifier: Modifier,
+    size: Dp,
+    color: Color,
+    alpha: Float,
+) = Spacer(
+    modifier = modifier
+        .size(size)
+        .alpha(alpha)
+        .background(
+            color = color,
+            shape = CircleShape
+        )
+)

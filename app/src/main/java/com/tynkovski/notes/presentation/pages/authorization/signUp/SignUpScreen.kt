@@ -39,12 +39,11 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.tynkovski.notes.R
 import com.tynkovski.notes.presentation.components.button.DefaultButton
 import com.tynkovski.notes.presentation.components.button.DefaultOutlinedButton
+import com.tynkovski.notes.presentation.navigation.SignInScreen
 import com.tynkovski.notes.presentation.pages.authorization.components.AuthField
 import com.tynkovski.notes.presentation.pages.authorization.components.SignBase
-import com.tynkovski.notes.presentation.pages.authorization.signIn.SignInScreen
 import org.koin.androidx.compose.getViewModel
 import org.orbitmvi.orbit.compose.collectAsState
-import com.tynkovski.notes.presentation.navigation.SignInScreen
 
 // region Reusable
 private val widthModifier = Modifier.fillMaxWidth()
@@ -71,9 +70,7 @@ fun SignUpScreen(
                 slideInHorizontally { -it } to slideOutHorizontally { it }
             }
 
-            (start with end).using(
-                SizeTransform(clip = false)
-            )
+            (start with end).using(SizeTransform(clip = false))
         },
     ) {
         when (it) {
