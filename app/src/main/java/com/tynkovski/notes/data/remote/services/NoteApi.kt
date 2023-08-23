@@ -30,14 +30,12 @@ interface NoteApi {
         text: String,
         title: String,
         color: Long,
-        tags: List<String>
     ): NetResult<NoteResponse>
 
     suspend fun updateNote(
         text: String,
         title: String,
         color: Long,
-        tags: List<String>
     ): NetResult<NoteResponse>
 }
 
@@ -80,10 +78,9 @@ class NoteApiImpl(
         text: String,
         title: String,
         color: Long,
-        tags: List<String>
     ): NetResult<NoteResponse> {
         return client.post("/note/create") {
-            setBody(NoteRequest(text, title, color, tags))
+            setBody(NoteRequest(text, title, color))
         }.toNetResult<NoteResponse>()
     }
 
@@ -91,10 +88,9 @@ class NoteApiImpl(
         text: String,
         title: String,
         color: Long,
-        tags: List<String>
     ): NetResult<NoteResponse> {
         return client.put("/note/update") {
-            setBody(NoteRequest(text, title, color, tags))
+            setBody(NoteRequest(text, title, color))
         }.toNetResult<NoteResponse>()
     }
 }

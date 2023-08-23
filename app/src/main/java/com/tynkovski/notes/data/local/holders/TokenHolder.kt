@@ -1,4 +1,4 @@
-package com.tynkovski.notes.data.local.holder
+package com.tynkovski.notes.data.local.holders
 
 import com.tynkovski.notes.data.local.preferences.LocalPreferences
 

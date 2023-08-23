@@ -20,15 +20,13 @@ interface NoteRepository {
     suspend fun createNote(
         text: String,
         title: String,
-        color: Long,
-        tags: List<String>
+        color: Long
     ): Flow<LocalResult<Note>>
 
     suspend fun updateNote(
         text: String,
         title: String,
-        color: Long,
-        tags: List<String>
+        color: Long
     ): Flow<LocalResult<Note>>
 }
 
@@ -57,10 +55,9 @@ class NoteRepositoryImpl(
         text: String,
         title: String,
         color: Long,
-        tags: List<String>
     ): Flow<LocalResult<Note>> {
         return flow {
-            emit(api.createNote(text, title, color, tags))
+            emit(api.createNote(text, title, color))
         }.toResult(::noteMapper)
     }
 
@@ -68,10 +65,9 @@ class NoteRepositoryImpl(
         text: String,
         title: String,
         color: Long,
-        tags: List<String>
     ): Flow<LocalResult<Note>> {
         return flow {
-            emit(api.updateNote(text, title, color, tags))
+            emit(api.updateNote(text, title, color))
         }.toResult(::noteMapper)
     }
 }

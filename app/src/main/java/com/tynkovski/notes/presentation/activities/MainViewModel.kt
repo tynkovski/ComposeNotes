@@ -1,7 +1,7 @@
 package com.tynkovski.notes.presentation.activities
 
 import androidx.lifecycle.ViewModel
-import com.tynkovski.notes.data.local.holder.TokenHolder
+import com.tynkovski.notes.data.local.holders.TokenHolder
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.reduce

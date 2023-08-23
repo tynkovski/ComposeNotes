@@ -3,7 +3,7 @@ package com.tynkovski.notes.data.remote.services
 import com.tynkovski.notes.data.remote.models.NetResult
 import com.tynkovski.notes.data.remote.models.toNetResult
 import com.tynkovski.notes.data.remote.requests.EditNameRequest
-import com.tynkovski.notes.data.remote.requests.PasswordRequest
+import com.tynkovski.notes.data.remote.requests.EditPasswordRequest
 import com.tynkovski.notes.data.remote.responses.UserResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.request.delete
@@ -34,7 +34,7 @@ class UserApiImpl(
 
     override suspend fun changePassword(oldPassword: String, newPassword: String): NetResult<Unit> {
         return client.post("/user/password") {
-            setBody(PasswordRequest(oldPassword, newPassword))
+            setBody(EditPasswordRequest(oldPassword, newPassword))
         }.toNetResult<Unit>()
     }
 

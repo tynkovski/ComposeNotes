@@ -7,5 +7,4 @@ data class NoteRequest(
     val text: String,
     val title: String,
     val color: Long,
-    val tags: List<String>,
 )
