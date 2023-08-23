@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.tynkovski.notes.R
+import com.tynkovski.notes.presentation.components.button.ButtonState
 import com.tynkovski.notes.presentation.components.button.DefaultButton
 import com.tynkovski.notes.presentation.components.button.DefaultOutlinedButton
 import com.tynkovski.notes.presentation.navigation.SignUpScreen
@@ -44,11 +45,12 @@ import com.tynkovski.notes.presentation.pages.authorization.components.SignBase
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 // region Reusable
-private val maxModifier = Modifier.fillMaxSize()
-private val widthModifier = Modifier.fillMaxWidth()
-private val paddingModifier = widthModifier.padding(horizontal = 16.dp)
+private val modifierMaxSize = Modifier.fillMaxSize()
+private val modifierMaxWidth = Modifier.fillMaxWidth()
+private val paddingModifier = modifierMaxWidth.padding(horizontal = 16.dp)
 // endregion
 
 private const val LOGIN_TAB = 0
@@ -59,6 +61,7 @@ private const val PASSWORD_TAB = 1
 fun SignInScreen(
     controller: NavController,
     modifier: Modifier,
+    login: (token: String) -> Unit
 ) {
     val viewModel = getViewModel<SignInViewModel>()
     val state by viewModel.collectAsState()
@@ -69,9 +72,9 @@ fun SignInScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val pagerState = rememberPagerState()
-    
+
     HorizontalPager(
-        modifier = maxModifier,
+        modifier = modifierMaxSize,
         state = pagerState,
         pageCount = 2,
         userScrollEnabled = false,
@@ -84,23 +87,25 @@ fun SignInScreen(
             coroutineScope.launch { pagerState.animateScrollToPage(it - 1) }
         }
 
+        fun signUp() {
+            controller.navigate(route = SignUpScreen.route) {
+                popUpTo(
+                    controller.graph.findStartDestination().id
+                ) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
+
         when (it) {
             LOGIN_TAB -> SignInLogin(
                 modifier = modifier,
                 input = input.login,
                 inputChanged = viewModel::inputLoginChanged,
                 nextScreenClick = ::nextPage,
-                signUpClick = {
-                    controller.navigate(route = SignUpScreen.route) {
-                        popUpTo(
-                            controller.graph.findStartDestination().id
-                        ) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
+                signUpClick = ::signUp,
                 requestFocus = keyboardVisible
             )
 
@@ -109,9 +114,16 @@ fun SignInScreen(
                 input = input.password,
                 inputChanged = viewModel::inputPasswordChanged,
                 backClick = ::previousPage,
-                onEnterClick = viewModel::enter,
-                requestFocus = keyboardVisible
+                signInClick = viewModel::signIn,
+                requestFocus = keyboardVisible,
+                buttonState = state.buttonState
             )
+        }
+    }
+
+    viewModel.collectSideEffect {
+        when (it) {
+            is SignInViewModel.SideEffect.UserLogin -> login(it.token)
         }
     }
 }
@@ -156,7 +168,7 @@ private fun SignInLogin(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             style = MaterialTheme.typography.labelLarge.copy(
                 fontWeight = FontWeight.Light
             ),
@@ -168,7 +180,7 @@ private fun SignInLogin(
         Spacer(modifier = Modifier.height(8.dp))
 
         AuthField(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             value = input,
             onValueChange = inputChanged,
             hint = stringResource(R.string.auth_login_hint),
@@ -183,20 +195,20 @@ private fun SignInLogin(
         }
 
         DefaultButton(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             onClick = nextScreenClick,
             text = stringResource(R.string.auth_button_continue),
             enabled = enabledButton,
         )
         Text(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             style = MaterialTheme.typography.bodyLarge,
             text = stringResource(R.string.auth_title_variant),
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.outline
         )
         DefaultOutlinedButton(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             onClick = signUpClick,
             text = stringResource(R.string.auth_title_sign_up),
             enabled = true
@@ -212,8 +224,9 @@ private fun SignInPassword(
     input: TextFieldValue,
     inputChanged: (TextFieldValue) -> Unit,
     backClick: () -> Unit,
-    onEnterClick: () -> Unit,
-    requestFocus: Boolean
+    signInClick: () -> Unit,
+    requestFocus: Boolean,
+    buttonState: ButtonState,
 ) = SignBase(
     modifier = modifier,
     backClick = backClick,
@@ -258,7 +271,7 @@ private fun SignInPassword(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             style = MaterialTheme.typography.labelLarge.copy(
                 fontWeight = FontWeight.Light
             ),
@@ -276,7 +289,7 @@ private fun SignInPassword(
         val invisible = ImageVector.vectorResource(R.drawable.ic_visibility_off)
 
         AuthField(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             value = input,
             onValueChange = inputChanged,
             hint = stringResource(R.string.auth_password_hint),
@@ -296,10 +309,11 @@ private fun SignInPassword(
         }
 
         DefaultButton(
-            modifier = widthModifier,
-            onClick = onEnterClick,
+            modifier = modifierMaxWidth,
+            onClick = signInClick,
             text = stringResource(R.string.sign_in_button_enter),
-            enabled = enabledButton
+            enabled = enabledButton,
+            state = buttonState
         )
 
         Spacer(modifier = Modifier.height(24.dp))

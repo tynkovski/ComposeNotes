@@ -1,4 +1,4 @@
-package com.tynkovski.notes.presentation.pages.authorization.signIn
+package com.tynkovski.notes.presentation.pages.authorization.state
 
 import androidx.compose.ui.text.input.TextFieldValue
 

@@ -27,7 +27,7 @@ const val REST_AUTH = "rest_auth_client"
 val clientModule = module {
     factory<Logger> { Logger.PRETTY }
 
-    factory<UrlProvider> { UrlProviderImpl("127.0.0.1:8080") }
+    factory<UrlProvider> { UrlProviderImpl("192.168.0.109:8080") }
 
     factory<URLProtocol> { URLProtocol.HTTP } // https
 

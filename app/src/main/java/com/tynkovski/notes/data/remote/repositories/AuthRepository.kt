@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 interface AuthRepository {
-    suspend fun register(login: String, password: String): Flow<LocalResult<Token>>
+    suspend fun register(login: String, name: String, password: String): Flow<LocalResult<Token>>
 
     suspend fun login(login: String, password: String): Flow<LocalResult<Token>>
 }
@@ -17,9 +17,9 @@ interface AuthRepository {
 class AuthRepositoryImpl(
     private val api: AuthApi
 ) : AuthRepository {
-    override suspend fun register(login: String, password: String): Flow<LocalResult<Token>> {
+    override suspend fun register(login: String, name: String, password: String): Flow<LocalResult<Token>> {
         return flow {
-            emit(api.register(login, password))
+            emit(api.register(login, name, password))
         }.toResult(::tokenMapper)
     }
 

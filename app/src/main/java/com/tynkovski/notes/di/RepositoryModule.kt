@@ -1,5 +1,8 @@
 package com.tynkovski.notes.di
 
+import com.tynkovski.notes.data.local.holder.TokenHolder
+import com.tynkovski.notes.data.local.holder.TokenHolderImpl
+import com.tynkovski.notes.data.local.preferences.LocalPreferences
 import com.tynkovski.notes.data.remote.repositories.AuthRepository
 import com.tynkovski.notes.data.remote.repositories.AuthRepositoryImpl
 import com.tynkovski.notes.data.remote.repositories.NoteRepository
@@ -17,4 +20,6 @@ val repositoryModule = module {
     factory<AuthRepository> { AuthRepositoryImpl(get<AuthApi>()) }
 
     factory<NoteRepository> { NoteRepositoryImpl(get<NoteApi>()) }
+
+    factory<TokenHolder> { TokenHolderImpl(get<LocalPreferences>()) }
 }

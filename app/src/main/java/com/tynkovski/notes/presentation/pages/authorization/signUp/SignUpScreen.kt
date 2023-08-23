@@ -1,7 +1,6 @@
 package com.tynkovski.notes.presentation.pages.authorization.signUp
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.tynkovski.notes.R
+import com.tynkovski.notes.presentation.components.button.ButtonState
 import com.tynkovski.notes.presentation.components.button.DefaultButton
 import com.tynkovski.notes.presentation.components.button.DefaultOutlinedButton
 import com.tynkovski.notes.presentation.navigation.SignInScreen
@@ -45,11 +45,12 @@ import com.tynkovski.notes.presentation.pages.authorization.components.SignBase
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 // region Reusable
-private val maxModifier = Modifier.fillMaxSize()
-private val widthModifier = Modifier.fillMaxWidth()
-private val paddingModifier = widthModifier.padding(horizontal = 16.dp)
+private val modifierMaxSize = Modifier.fillMaxSize()
+private val modifierMaxWidth = Modifier.fillMaxWidth()
+private val paddingModifier = modifierMaxWidth.padding(horizontal = 16.dp)
 // endregion
 
 private const val LOGIN_TAB = 0
@@ -61,6 +62,7 @@ private const val PASSWORD_TAB = 2
 fun SignUpScreen(
     controller: NavController,
     modifier: Modifier,
+    login: (token: String) -> Unit
 ) {
     val viewModel = getViewModel<SignUpViewModel>()
     val state by viewModel.collectAsState()
@@ -72,7 +74,7 @@ fun SignUpScreen(
     val pagerState = rememberPagerState()
 
     HorizontalPager(
-        modifier = maxModifier,
+        modifier = modifierMaxSize,
         state = pagerState,
         pageCount = 3,
         userScrollEnabled = false,
@@ -85,52 +87,55 @@ fun SignUpScreen(
             coroutineScope.launch { pagerState.animateScrollToPage(it - 1) }
         }
 
+        fun signIn() {
+            controller.navigate(route = SignInScreen.route) {
+                popUpTo(
+                    controller.graph.findStartDestination().id
+                ) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
+
         when (it) {
-            LOGIN_TAB -> {
-                SignUpLogin(
-                    modifier = modifier,
-                    backClick = controller::popBackStack,
-                    nextScreenClick = ::nextPage,
-                    signInClick = {
-                        controller.navigate(route = SignInScreen.route) {
-                            popUpTo(
-                                controller.graph.findStartDestination().id
-                            ) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
-                    loginInput = input.login,
-                    loginInputChanged = viewModel::inputLoginChanged,
-                    requestFocus = keyboardVisible
-                )
-            }
+            LOGIN_TAB -> SignUpLogin(
+                modifier = modifier,
+                backClick = controller::popBackStack,
+                nextScreenClick = ::nextPage,
+                signInClick = ::signIn,
+                loginInput = input.login,
+                loginInputChanged = viewModel::inputLoginChanged,
+                requestFocus = keyboardVisible
+            )
 
-            NAME_TAB -> {
-                SignUpName(
-                    modifier = modifier,
-                    backClick = ::previousPage,
-                    nextScreenClick = ::nextPage,
-                    nameInput = input.name,
-                    nameInputChanged = viewModel::inputNameChanged,
-                    requestFocus = keyboardVisible
-                )
-            }
+            NAME_TAB -> SignUpName(
+                modifier = modifier,
+                backClick = ::previousPage,
+                nextScreenClick = ::nextPage,
+                nameInput = input.name,
+                nameInputChanged = viewModel::inputNameChanged,
+                requestFocus = keyboardVisible
+            )
 
-            PASSWORD_TAB -> {
-                SignUpPassword(
-                    modifier = modifier,
-                    backClick = ::previousPage,
-                    signUpClick = viewModel::signUp,
-                    passwordInput = input.password,
-                    passwordRepeatInput = input.repeatedPassword,
-                    passwordInputChanged = viewModel::inputPasswordChanged,
-                    passwordRepeatInputChanged = viewModel::inputRepeatedPasswordChanged,
-                    requestFocus = keyboardVisible
-                )
-            }
+            PASSWORD_TAB -> SignUpPassword(
+                modifier = modifier,
+                backClick = ::previousPage,
+                signUpClick = viewModel::signUp,
+                passwordInput = input.password,
+                passwordRepeatInput = input.repeatedPassword,
+                passwordInputChanged = viewModel::inputPasswordChanged,
+                passwordRepeatInputChanged = viewModel::inputRepeatedPasswordChanged,
+                requestFocus = keyboardVisible,
+                buttonState = state.buttonState
+            )
+        }
+    }
+
+    viewModel.collectSideEffect {
+        when (it) {
+            is SignUpViewModel.SideEffect.UserRegister -> login(it.token)
         }
     }
 }
@@ -176,7 +181,7 @@ private fun SignUpLogin(
     ) {
 
         Text(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             style = MaterialTheme.typography.labelLarge.copy(
                 fontWeight = FontWeight.Light
             ),
@@ -202,7 +207,7 @@ private fun SignUpLogin(
         }
 
         AuthField(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             value = loginInput,
             onValueChange = loginInputChanged,
             hint = stringResource(R.string.auth_login_hint),
@@ -218,20 +223,20 @@ private fun SignUpLogin(
         }
 
         DefaultButton(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             onClick = nextScreenClick,
             text = stringResource(R.string.sign_up_login_button),
             enabled = enabledButton,
         )
         Text(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.outline,
             text = stringResource(R.string.auth_title_variant),
             textAlign = TextAlign.Center
         )
         DefaultOutlinedButton(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             onClick = signInClick,
             text = stringResource(R.string.auth_title_sign_in),
             enabled = true
@@ -294,7 +299,7 @@ private fun SignUpName(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             style = MaterialTheme.typography.labelLarge.copy(
                 fontWeight = FontWeight.Light
             ),
@@ -312,7 +317,7 @@ private fun SignUpName(
         }
 
         AuthField(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             value = nameInput,
             onValueChange = nameInputChanged,
             hint = stringResource(R.string.auth_name_hint),
@@ -324,7 +329,7 @@ private fun SignUpName(
         Spacer(modifier = Modifier.height(28.dp))
 
         DefaultButton(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             onClick = nextScreenClick,
             text = stringResource(R.string.sign_up_name_button),
             enabled = true,
@@ -344,7 +349,8 @@ private fun SignUpPassword(
     passwordInputChanged: (TextFieldValue) -> Unit,
     passwordRepeatInputChanged: (TextFieldValue) -> Unit,
     signUpClick: () -> Unit,
-    requestFocus: Boolean
+    requestFocus: Boolean,
+    buttonState: ButtonState
 ) = SignBase(
     modifier = modifier,
     showIcon = true,
@@ -390,7 +396,7 @@ private fun SignUpPassword(
     ) {
 
         Text(
-            modifier = widthModifier,
+            modifier = modifierMaxWidth,
             style = MaterialTheme.typography.labelLarge.copy(
                 fontWeight = FontWeight.Light
             ),
@@ -491,6 +497,7 @@ private fun SignUpPassword(
         onClick = signUpClick,
         text = stringResource(R.string.sign_up_password_button),
         enabled = passwordsAreEqual,
+        state = buttonState
     )
 
     Spacer(modifier = Modifier.height(24.dp))

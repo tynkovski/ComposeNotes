@@ -16,7 +16,9 @@ private val modifierMaxSize = Modifier.fillMaxSize()
 // endregion
 
 @Composable
-fun AuthScreen() {
+fun AuthScreen(
+    login: (String) -> Unit
+) {
     val navController = rememberNavController()
 
     NavHost(
@@ -27,7 +29,8 @@ fun AuthScreen() {
         composable(route = SignInScreen.route) {
             SignInScreen(
                 controller = navController,
-                modifier = modifierMaxSize
+                modifier = modifierMaxSize,
+                login = login
             )
         }
 
@@ -35,6 +38,7 @@ fun AuthScreen() {
             SignUpScreen(
                 modifier = modifierMaxSize,
                 controller = navController,
+                login = login
             )
         }
     }

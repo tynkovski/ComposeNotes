@@ -2,6 +2,7 @@ package com.tynkovski.notes.data.local.preferences
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import kotlinx.serialization.json.Json
 
 internal class LocalPreferences(
     private val preferences: SharedPreferences,
