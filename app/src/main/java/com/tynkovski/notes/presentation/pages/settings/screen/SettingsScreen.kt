@@ -12,7 +12,6 @@ private val modifierMaxSize = Modifier.fillMaxSize()
 
 @Composable
 fun SettingsScreen(
-     controller: NavController,
      modifier: Modifier,
      logout: () -> Unit,
 ) {

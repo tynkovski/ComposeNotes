@@ -2,17 +2,17 @@
     <!--Application-->
     <string name="app_name">ComposeNotes</string>
 
-    <!--Search Screen-->
-    <string name="search_screen_title">Search</string>
-
-
     <!--Top App Bar-->
     <string name="top_bar_title_selected">Selected</string>
+
+    <!--Top App Bar-->
+    <string name="modal_navigation_title">Want to save something?</string>
+    <string name="modal_navigation_description">Best choice</string>
 
     <!--Loading-->
     <string name="loading_title">Loading…</string>
 
-    <!--Sign In-->
+    <!--Sign In Screen-->
     <string name="auth_password_hint">Password</string>
     <string name="auth_repeat_password_hint">Repeat password</string>
     <string name="auth_login_hint">Login</string>
@@ -29,7 +29,7 @@
     <string name="sign_in_password_description">Enter your password</string>
     <string name="sign_in_button_enter">Enter</string>
 
-    <!--Sign Up-->
+    <!--Sign Up Screen-->
     <string name="sign_up_login_title">Registration</string>
     <string name="sign_up_login_description">Come up with a unique login to create an account</string>
     <string name="sign_up_login_field_description">Only latin letters, numbers, no spaces are allowed in login</string>
@@ -50,5 +50,14 @@
     <string name="sign_up_password_field_description_mismatch">Password mismatch</string>
     <string name="sign_up_name_button">Take a name</string>
     <string name="sign_up_password_button">Create account</string>
+
+    <!--Settings Screen-->
+    <string name="settings_title">Settings</string>
+
+    <!--Search Screen-->
+    <string name="search_title">Search</string>
+
+    <!--Notes Screen-->
+    <string name="notes_title">Notes</string>
 
 </resources>
