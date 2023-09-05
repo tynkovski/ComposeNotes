@@ -11,7 +11,6 @@ object SignInScreen : NavigationScreen("signIn")
 object SignUpScreen : NavigationScreen("signUp")
 
 object DetailNoteScreen : NavigationScreen("detail?noteId={noteId}") {
-
     fun route(noteId: String) = "detail?${argument.name}=$noteId"
 
     val argument: NamedNavArgument = navArgument(name = "noteId") {
@@ -19,9 +18,3 @@ object DetailNoteScreen : NavigationScreen("detail?noteId={noteId}") {
         type = NavType.StringType
     }
 }
-
-object NotesScreen : NavigationScreen("notes")
-
-object SettingsScreen : NavigationScreen("settings")
-
-object SearchScreen : NavigationScreen("search")
