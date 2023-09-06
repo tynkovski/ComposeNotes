@@ -5,7 +5,7 @@ import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
 
 class DetailNoteViewModel(
-    id: String,
+    noteId: String, // check for empty
 ) : ViewModel(),
     ContainerHost<DetailNoteViewModel.State, DetailNoteViewModel.SideEffect> {
 

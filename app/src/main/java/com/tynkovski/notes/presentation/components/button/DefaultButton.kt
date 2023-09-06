@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -61,7 +62,8 @@ fun DefaultButton(
     ) {
         when(state) {
             ButtonState.Loading -> {
-                SpinningCircleProgressIndicator(durationMillis = 800)
+                CircularProgressIndicator()
+                //SpinningCircleProgressIndicator(durationMillis = 800)
             }
             ButtonState.Success -> {
                 leadingIcon?.let {

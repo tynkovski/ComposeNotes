@@ -18,3 +18,5 @@ object DetailNoteScreen : NavigationScreen("detail?noteId={noteId}") {
         type = NavType.StringType
     }
 }
+
+object NewNoteScreen : NavigationScreen("newNote")

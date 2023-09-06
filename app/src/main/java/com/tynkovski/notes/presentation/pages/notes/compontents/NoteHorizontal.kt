@@ -38,7 +38,10 @@ fun NoteHorizontal(
         .clip(shape)
         .combinedClickable(onClick = onClick, onLongClick = onLongClick),
     shape = shape,
-    elevation = CardDefaults.outlinedCardElevation(),
+    elevation = CardDefaults.elevatedCardElevation(),
+    colors = CardDefaults.cardColors(
+        containerColor = MaterialTheme.colorScheme.background,
+    )
 ) {
     note.color?.let {
         Spacer(
