@@ -5,6 +5,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -54,6 +55,7 @@ private val modifierWidth = Modifier.fillMaxWidth()
 fun DetailTopBar(
     modifier: Modifier,
     edit: Boolean,
+    newNote: Boolean,
     title: String,
     titleChanged: (String) -> Unit,
     color: Long,
@@ -117,7 +119,11 @@ fun DetailTopBar(
                     )
                 } else {
                     Text(
-                        modifier = modifierWidth.clickable(onClick = onStartEditNote),
+                        modifier = modifierWidth.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = onStartEditNote
+                        ),
                         text = title,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -144,14 +150,19 @@ fun DetailTopBar(
                 DefaultMenuItem(
                     text = stringResource(id = R.string.edit),
                     leadingIcon = ImageVector.vectorResource(R.drawable.ic_edit),
-                    onClick = onStartEditNote
+                    onClick = {
+                        onStartEditNote()
+                        moreOptionsChanged(false)
+                    }
                 )
 
-                DefaultMenuItem(
-                    text = stringResource(id = R.string.delete),
-                    leadingIcon = ImageVector.vectorResource(R.drawable.ic_delete),
-                    onClick = onDeleteNote
-                )
+                if (!newNote) {
+                    DefaultMenuItem(
+                        text = stringResource(id = R.string.delete),
+                        leadingIcon = ImageVector.vectorResource(R.drawable.ic_delete),
+                        onClick = onDeleteNote
+                    )
+                }
 
                 val (showColorDialog, showColorDialogChanged) = remember {
                     mutableStateOf(false)

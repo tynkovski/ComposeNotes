@@ -13,20 +13,26 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.union
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.tynkovski.notes.R
 import com.tynkovski.notes.presentation.components.button.DefaultButton
+import com.tynkovski.notes.presentation.components.iconButton.DefaultIconButton
 import com.tynkovski.notes.presentation.components.markdown.MarkDownEdit
 import com.tynkovski.notes.presentation.utils.ext.horizontalCutout
 import org.orbitmvi.orbit.compose.collectAsState
@@ -47,11 +53,13 @@ fun BaseDetailScreen(
     when (val newState = state) {
         is BaseDetailViewModel.State.Error -> Error(
             modifier = modifier,
-            onRefresh = viewModel::getNote
+            onRefresh = viewModel::getNote,
+            onBack = controller::popBackStack
         )
 
         BaseDetailViewModel.State.Loading -> Loading(
-            modifier = modifier
+            modifier = modifier,
+            onBack=controller::popBackStack
         )
 
         is BaseDetailViewModel.State.Success -> Success(
@@ -60,7 +68,8 @@ fun BaseDetailScreen(
             onSaveNote = viewModel::saveNote,
             onStartEditNote = viewModel::startEditNote,
             onDeleteNote = viewModel::deleteNote,
-            onBack = controller::popBackStack
+            onBack = controller::popBackStack,
+            newNote = viewModel.noteId.isEmpty()
         )
     }
 }
@@ -68,6 +77,7 @@ fun BaseDetailScreen(
 @Composable
 private fun Success(
     modifier: Modifier,
+    newNote: Boolean,
     state: BaseDetailViewModel.State.Success,
     onSaveNote: (
         title: String,
@@ -103,54 +113,113 @@ private fun Success(
                 onStartEditNote = onStartEditNote,
                 color = color,
                 colorChanged = colorChanged,
-                onSaveNote = { onSaveNote(title, text, color) }
+                onSaveNote = { onSaveNote(title, text, color) },
+                newNote = newNote
             )
         },
         contentWindowInsets = WindowInsets.horizontalCutout
-            .union(WindowInsets.navigationBars)
+            .union(WindowInsets.navigationBars),
+        containerColor = Color(0xFFFBFDFA)
     ) { paddingValues ->
         MarkDownEdit(
             modifier = modifierMaxSize
-                .padding(paddingValues)
-                .padding(16.dp),
+                .padding(paddingValues),
+            contentPadding = PaddingValues(16.dp),
             edit = state.edit,
             text = text,
             textChanged = textChanged,
-            onClick = onStartEditNote
+            onClick = onStartEditNote,
+            textColor = Color(0xFF002018)
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Loading(
-    modifier: Modifier
-) = Box(
+    modifier: Modifier,
+    onBack: () -> Unit
+) = Scaffold(
     modifier = modifier,
-    contentAlignment = Alignment.Center
-) {
-    CircularProgressIndicator()
+    topBar = {
+        TopAppBar(
+            navigationIcon = {
+                DefaultIconButton(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back_ios_new),
+                    onClick = onBack,
+                    backgroundColor = Color.Transparent,
+                    iconTint = MaterialTheme.colorScheme.onSurface,
+                    contentDescription = stringResource(R.string.back)
+                )
+            },
+            title = {
+                Text(
+                    modifier = Modifier,
+                    text = stringResource(id = R.string.loading_title),
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+        )
+    },
+    contentWindowInsets = WindowInsets.horizontalCutout
+        .union(WindowInsets.navigationBars)
+) { paddingValues ->
+    Box(
+        modifier = modifierMaxSize.padding(paddingValues),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Error(
     modifier: Modifier,
-    onRefresh: () -> Unit
-) = Column(
+    onRefresh: () -> Unit,
+    onBack: () -> Unit
+) = Scaffold(
     modifier = modifier,
-    horizontalAlignment = Alignment.CenterHorizontally,
-    verticalArrangement = Arrangement.Center
-) {
-    Text(
-        modifier = Modifier,
-        style = MaterialTheme.typography.titleLarge,
-        text = stringResource(id = R.string.note_error_title)
-    )
+    topBar = {
+        TopAppBar(
+            navigationIcon = {
+                DefaultIconButton(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back_ios_new),
+                    onClick = onBack,
+                    backgroundColor = Color.Transparent,
+                    iconTint = MaterialTheme.colorScheme.onSurface,
+                    contentDescription = stringResource(R.string.back)
+                )
+            },
+            title = {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(id = R.string.error_title),
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+        )
+    },
+    contentWindowInsets = WindowInsets.horizontalCutout
+        .union(WindowInsets.navigationBars)
+) { paddingValues ->
+    Column(
+        modifier = modifierMaxSize.padding(paddingValues),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            modifier = Modifier,
+            style = MaterialTheme.typography.titleLarge,
+            text = stringResource(id = R.string.note_error_title)
+        )
 
-    Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
-    DefaultButton(
-        onClick = onRefresh,
-        text = stringResource(id = R.string.note_button_refresh),
-        contentPadding = PaddingValues(horizontal = 16.dp)
-    )
+        DefaultButton(
+            onClick = onRefresh,
+            text = stringResource(id = R.string.note_button_refresh),
+            contentPadding = PaddingValues(horizontal = 16.dp)
+        )
+    }
 }

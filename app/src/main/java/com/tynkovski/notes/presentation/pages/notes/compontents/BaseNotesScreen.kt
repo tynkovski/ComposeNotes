@@ -10,12 +10,17 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -54,7 +59,7 @@ private val modifierMaxSize = Modifier.fillMaxSize()
 private val modifierWidth = Modifier.fillMaxWidth()
 // endregion
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun BaseNotesScreen(
     viewModel: BaseNotesViewModel,
@@ -111,30 +116,46 @@ fun BaseNotesScreen(
         contentWindowInsets = WindowInsets.horizontalCutout
             .union(WindowInsets.navigationBars)
     ) { paddingValues ->
-        when (val currentState = state) {
-            is BaseNotesViewModel.State.Error -> Error(
-                modifier = modifierMaxSize.padding(paddingValues),
-                state = currentState,
-                onRefresh = viewModel::getNotes
-            )
+        val pullRefreshState = rememberPullRefreshState(
+            refreshing = state is BaseNotesViewModel.State.Loading,
+            onRefresh = viewModel::getNotes
+        )
 
-            is BaseNotesViewModel.State.Loading -> Loading(
-                modifier = modifierMaxSize.padding(paddingValues),
-                state = currentState
-            )
+        val paddingModifier = modifierMaxSize.padding(paddingValues)
 
-            is BaseNotesViewModel.State.Success -> if (currentState.notes.isEmpty()) Empty(
-                modifier = modifierMaxSize.padding(paddingValues)
-            ) else Success(
-                modifier = modifierMaxSize.padding(paddingValues),
-                controller = controller,
-                state = currentState,
-                selectNote = viewModel::selectNote
+        Box(
+            modifier = paddingModifier.pullRefresh(pullRefreshState),
+        ) {
+            when (val currentState = state) {
+                is BaseNotesViewModel.State.Error -> Error(
+                    modifier = modifierMaxSize,
+                    state = currentState,
+                    onRefresh = viewModel::getNotes
+                )
+
+                is BaseNotesViewModel.State.Loading -> Loading(
+                    modifier = modifierMaxSize,
+                    state = currentState
+                )
+
+                is BaseNotesViewModel.State.Success -> if (currentState.notes.isEmpty()) Empty(
+                    modifier = modifierMaxSize
+                ) else Success(
+                    modifier = modifierMaxSize,
+                    controller = controller,
+                    state = currentState,
+                    selectNote = viewModel::selectNote,
+                )
+            }
+
+            PullRefreshIndicator(
+                refreshing = state is BaseNotesViewModel.State.Loading,
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter)
             )
         }
     }
 }
-
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -202,15 +223,28 @@ private fun Empty(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun Loading(
     modifier: Modifier,
     state: BaseNotesViewModel.State.Loading
-) = Box(
+) = LazyVerticalStaggeredGrid(
     modifier = modifier,
-    contentAlignment = Alignment.Center
+    columns = StaggeredGridCells.Fixed(2),
+    verticalItemSpacing = 8.dp,
+    horizontalArrangement = Arrangement.spacedBy(8.dp),
+    contentPadding = PaddingValues(horizontal = 16.dp) + PaddingValues(bottom = 86.dp),
 ) {
-    CircularProgressIndicator()
+    items(
+        count = 16,
+        key = { it }
+    ) {
+        NoteShimmerHorizontal(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height((56 * ((it % 4) + 1)).dp),
+        )
+    }
 }
 
 @Composable

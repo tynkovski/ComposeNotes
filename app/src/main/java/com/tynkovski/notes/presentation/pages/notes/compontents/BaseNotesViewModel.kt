@@ -28,7 +28,7 @@ abstract class BaseNotesViewModel : ViewModel(),
         val sort: NoteSort
 
         data class Loading(
-            override val sort: NoteSort
+            override val sort: NoteSort,
         ) : State
 
         data class Success(

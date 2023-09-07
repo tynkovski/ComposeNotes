@@ -108,6 +108,13 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-paging:$room_version")
 
-    def markdown_version = "0.3.4"
-    implementation("com.github.jeziellago:compose-markdown:$markdown_version")
+//    def markdown_version = "0.3.4"
+//    implementation("com.github.jeziellago:compose-markdown:$markdown_version")
+
+    implementation "androidx.compose.material:material:1.4.1"
+
+    def richtext_version = "0.17.0"
+    //implementation "com.halilibo.compose-richtext:richtext-ui:$richtext_version"
+    implementation "com.halilibo.compose-richtext:richtext-commonmark:$richtext_version"
+    //implementation "com.halilibo.compose-richtext:richtext-ui-material3:$richtext_version"
 }

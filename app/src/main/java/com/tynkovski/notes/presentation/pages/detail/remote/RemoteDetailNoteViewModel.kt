@@ -82,8 +82,7 @@ class RemoteDetailNoteViewModel(
     }
 
     override fun deleteNote() = intent {
-        val oldState = (state as? State.Success) ?: return@intent
-        TODO("Not yet implemented")
+                notesRepository.deleteNote(noteId)
     }
 
 }

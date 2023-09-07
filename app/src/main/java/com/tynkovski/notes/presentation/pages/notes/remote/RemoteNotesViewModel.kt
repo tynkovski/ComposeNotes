@@ -1,41 +1,31 @@
 package com.tynkovski.notes.presentation.pages.notes.remote
 
-import androidx.lifecycle.ViewModel
-import com.tynkovski.notes.data.remote.models.ErrorException
 import com.tynkovski.notes.data.remote.models.onError
 import com.tynkovski.notes.data.remote.models.onLoading
 import com.tynkovski.notes.data.remote.models.onSuccess
 import com.tynkovski.notes.data.remote.repositories.NoteRepository
-import com.tynkovski.notes.domain.models.Note
-import com.tynkovski.notes.domain.models.NoteSort
 import com.tynkovski.notes.presentation.pages.notes.compontents.BaseNotesViewModel
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
-import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
-import org.orbitmvi.orbit.viewmodel.container
 
 class RemoteNotesViewModel(
     private val notesRepository: NoteRepository
 ) : BaseNotesViewModel() {
     override fun getNotes() = intent {
         val sort = (state as? State.Success)?.sort ?: defaultSort
-        notesRepository
-            .getNotes(sort)
+        notesRepository.getNotes(sort)
             .onLoading {
                 reduce { State.Loading(sort = sort) }
-            }
-            .onSuccess {
+            }.onSuccess {
                 reduce {
                     State.Success(sort = sort, notes = it.notes, selectedNotes = setOf())
                 }
-            }
-            .onError {
+            }.onError {
                 reduce { State.Error(sort = sort, error = it) }
-            }
-            .collect()
+            }.collect()
     }
 
     override fun selectNote(noteId: String) = intent {
@@ -55,16 +45,14 @@ class RemoteNotesViewModel(
         reduce { oldState.copy(selectedNotes = setOf()) }
     }
 
-    override fun deleteSelectedNotes()= intent {
+    override fun deleteSelectedNotes() = intent {
         val oldState = (state as? State.Success) ?: return@intent
 
-        notesRepository
-            .deleteNotes(oldState.selectedNotes.toList())
+        notesRepository.deleteNotes(oldState.selectedNotes.toList())
             .onLoading {
-                reduce { State.Loading(oldState.sort) }
+                // reduce { State.Loading(oldState.sort) }
                 postSideEffect(SideEffect.HideDialog)
-            }
-            .onSuccess {
+            }.onSuccess {
                 val notes = oldState.notes.filter { it.id !in oldState.selectedNotes }
                 reduce {
                     oldState.copy(
@@ -73,11 +61,9 @@ class RemoteNotesViewModel(
                     )
                 }
                 postSideEffect(SideEffect.HideDialog)
-            }
-            .onError {
+            }.onError {
                 reduce { State.Error(sort = oldState.sort, error = it) }
                 postSideEffect(SideEffect.HideDialog)
-            }
-            .collect()
+            }.collect()
     }
 }
