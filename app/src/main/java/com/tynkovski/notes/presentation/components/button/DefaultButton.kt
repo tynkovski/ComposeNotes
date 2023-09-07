@@ -38,9 +38,9 @@ fun buttonColors(state: ButtonState) = when(state) {
 
 @Composable
 fun DefaultButton(
-    modifier: Modifier,
     onClick: () -> Unit,
     text: String,
+    modifier: Modifier = Modifier,
     textStyle: TextStyle = defaultTypography.labelMedium,
     textAlign: TextAlign = TextAlign.Center,
     shape: CornerBasedShape = MaterialTheme.shapes.large,

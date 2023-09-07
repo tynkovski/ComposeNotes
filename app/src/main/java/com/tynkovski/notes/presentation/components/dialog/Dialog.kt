@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -26,6 +27,7 @@ fun Dialog(
     shape: Shape = MaterialTheme.shapes.medium,
     contentPadding: PaddingValues = defaultPaddings,
     properties: DialogProperties = DialogProperties(),
+    alignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     content: @Composable ColumnScope.() -> Unit,
 ) = if (visible) {
     Dialog(
@@ -35,7 +37,8 @@ fun Dialog(
             Column(
                 modifier = Modifier
                     .background(backgroundColor, shape)
-                    .padding(contentPadding)
+                    .padding(contentPadding),
+                horizontalAlignment = alignment
             ) {
                 content()
             }
