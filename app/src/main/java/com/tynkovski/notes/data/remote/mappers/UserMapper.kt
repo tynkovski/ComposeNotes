@@ -6,5 +6,6 @@ import com.tynkovski.notes.domain.models.User
 fun userMapper(user: UserResponse): User = User(
     id = user.id,
     login = user.login,
+    name = user.name,
     createdAt = user.createdAt
 )

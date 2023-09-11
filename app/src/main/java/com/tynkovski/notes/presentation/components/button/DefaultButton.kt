@@ -92,6 +92,15 @@ fun DefaultButton(
                 }
             }
             ButtonState.Error -> {
+                leadingIcon?.let {
+                    Icon(
+                        modifier = Modifier,
+                        imageVector = it,
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+
                 Text(
                     modifier = Modifier,
                     text = text,

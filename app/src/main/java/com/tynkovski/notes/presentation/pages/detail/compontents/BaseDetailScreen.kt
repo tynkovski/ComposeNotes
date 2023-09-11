@@ -210,7 +210,7 @@ private fun Error(
 
         DefaultButton(
             onClick = onRefresh,
-            text = stringResource(id = R.string.note_button_refresh),
+            text = stringResource(id = R.string.button_refresh),
             contentPadding = PaddingValues(horizontal = 16.dp)
         )
     }

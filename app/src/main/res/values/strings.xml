@@ -65,6 +65,7 @@
     <string name="notes_loading_title">Loading notes from server</string>
     <string name="notes_empty_title">You have no notes</string>
     <string name="notes_empty_description">You can create them</string>
+    <string name="notes_error_title">Getting notes error</string>
 
     <string name="note_title_create_date">created</string>
     <string name="note_title_update_date">updated</string>
@@ -72,8 +73,8 @@
     <string name="note_title_delete">Delete selected notes?</string>
     <string name="note_title_delete_confirm">Delete</string>
     <string name="note_title_delete_cancel">Cancel</string>
-    <string name="note_button_refresh">Refresh</string>
 
+    <!--Core-->
     <string name="add">Add</string>
     <string name="menu">Menu</string>
     <string name="close">Close</string>
@@ -83,9 +84,17 @@
     <string name="back">Back</string>
     <string name="edit">Edit</string>
     <string name="cancel">Cancel</string>
-    <string name="notes_error_title">Getting notes error</string>
+    <string name="logout">Logout</string>
+    <string name="button_refresh">Refresh</string>
+
+    <!--Detail-->
     <string name="note_error_title">Getting note error</string>
     <string name="detail_note_set_color">Set color</string>
     <string name="detail_note_menu_title">Color</string>
     <string name="detail_note_button_delete_color">Remove</string>
+
+    <!--Settings-->
+    <string name="profile_screen_get_user_error">Getting user error</string>
+    <string name="profile_screen_title_user_login">Login</string>
+    <string name="profile_screen_title_user_name">Name</string>
 </resources>

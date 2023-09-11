@@ -1,5 +1,9 @@
 package com.tynkovski.notes.presentation.pages.notes.compontents
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,7 +14,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.union
@@ -21,7 +24,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -59,7 +61,9 @@ private val modifierMaxSize = Modifier.fillMaxSize()
 private val modifierWidth = Modifier.fillMaxWidth()
 // endregion
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class,
+    ExperimentalAnimationApi::class
+)
 @Composable
 fun BaseNotesScreen(
     viewModel: BaseNotesViewModel,
@@ -103,18 +107,23 @@ fun BaseNotesScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { controller.navigate(route = NewRemoteNoteScreen.route) },
-                containerColor = MaterialTheme.colorScheme.surface
+            AnimatedVisibility(
+                visible = state is BaseNotesViewModel.State.Success,
+                enter = scaleIn(),
+                exit = scaleOut()
             ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_add),
-                    contentDescription = stringResource(R.string.add)
-                )
+                FloatingActionButton(
+                    onClick = { controller.navigate(route = NewRemoteNoteScreen.route) },
+                    containerColor = MaterialTheme.colorScheme.surface
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_add),
+                        contentDescription = stringResource(R.string.add)
+                    )
+                }
             }
         },
-        contentWindowInsets = WindowInsets.horizontalCutout
-            .union(WindowInsets.navigationBars)
+        contentWindowInsets = WindowInsets.horizontalCutout.union(WindowInsets.navigationBars)
     ) { paddingValues ->
         val pullRefreshState = rememberPullRefreshState(
             refreshing = state is BaseNotesViewModel.State.Loading,
@@ -123,9 +132,7 @@ fun BaseNotesScreen(
 
         val paddingModifier = modifierMaxSize.padding(paddingValues)
 
-        Box(
-            modifier = paddingModifier.pullRefresh(pullRefreshState),
-        ) {
+        Box(modifier = paddingModifier.pullRefresh(pullRefreshState)) {
             when (val currentState = state) {
                 is BaseNotesViewModel.State.Error -> Error(
                     modifier = modifierMaxSize,
@@ -151,7 +158,9 @@ fun BaseNotesScreen(
             PullRefreshIndicator(
                 refreshing = state is BaseNotesViewModel.State.Loading,
                 state = pullRefreshState,
-                modifier = Modifier.align(Alignment.TopCenter)
+                modifier = Modifier.align(Alignment.TopCenter),
+                backgroundColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.secondary
             )
         }
     }
@@ -267,7 +276,7 @@ private fun Error(
 
     DefaultButton(
         onClick = onRefresh,
-        text = stringResource(id = R.string.note_button_refresh),
+        text = stringResource(id = R.string.button_refresh),
         contentPadding = PaddingValues(horizontal = 16.dp)
     )
 }
