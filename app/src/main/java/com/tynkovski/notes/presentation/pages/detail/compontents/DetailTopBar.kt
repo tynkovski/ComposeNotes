@@ -6,8 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.union
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.DropdownMenuItem
@@ -37,8 +34,6 @@ import androidx.compose.ui.unit.dp
 import com.tynkovski.notes.R
 import com.tynkovski.notes.presentation.components.anim.AnimatedFade
 import com.tynkovski.notes.presentation.components.anim.AnimatedScale
-import com.tynkovski.notes.presentation.components.button.DefaultButton
-import com.tynkovski.notes.presentation.components.dialog.Dialog
 import com.tynkovski.notes.presentation.components.iconButton.DefaultIconButton
 import com.tynkovski.notes.presentation.components.menu.DefaultMenu
 import com.tynkovski.notes.presentation.components.menu.DefaultMenuItem
@@ -169,7 +164,7 @@ fun DetailTopBar(
                 }
 
                 DropdownMenuItem(
-                    text = { Text(text = stringResource(id = R.string.detail_note_change_color)) },
+                    text = { Text(text = stringResource(id = R.string.detail_note_menu_title)) },
                     modifier = modifier,
                     onClick = {
                         showColorDialogChanged(true)
@@ -194,30 +189,12 @@ fun DetailTopBar(
                     }
                 )
 
-                Dialog(
+                ColorDialog(
                     visible = showColorDialog,
-                    onDismissRequest = { showColorDialogChanged(false) }
-                ) {
-                    Text(
-                        modifier = Modifier,
-                        text = "Color Dialog"
-                    )
-                    Row {
-                        DefaultButton(
-                            onClick = { colorChanged(0xff_ff_00_ff) },
-                            text = "Set Color",
-                            contentPadding = PaddingValues(horizontal = 16.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
-                        DefaultButton(
-                            onClick = { showColorDialogChanged(false) },
-                            text = "Cancel",
-                            contentPadding = PaddingValues(horizontal = 16.dp)
-                        )
-                    }
-                }
+                    currentColor = color,
+                    onDismiss = { showColorDialogChanged(false) },
+                    onColorSelected = colorChanged
+                )
             }
         }
     )

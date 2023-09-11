@@ -82,7 +82,10 @@
     <string name="save">Save</string>
     <string name="back">Back</string>
     <string name="edit">Edit</string>
+    <string name="cancel">Cancel</string>
     <string name="notes_error_title">Getting notes error</string>
     <string name="note_error_title">Getting note error</string>
-    <string name="detail_note_change_color">Color</string>
+    <string name="detail_note_set_color">Set color</string>
+    <string name="detail_note_menu_title">Color</string>
+    <string name="detail_note_button_delete_color">Remove</string>
 </resources>

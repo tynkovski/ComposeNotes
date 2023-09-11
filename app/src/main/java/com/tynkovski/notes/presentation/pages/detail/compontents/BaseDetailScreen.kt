@@ -59,7 +59,7 @@ fun BaseDetailScreen(
 
         BaseDetailViewModel.State.Loading -> Loading(
             modifier = modifier,
-            onBack=controller::popBackStack
+            onBack = controller::popBackStack
         )
 
         is BaseDetailViewModel.State.Success -> Success(
@@ -79,11 +79,7 @@ private fun Success(
     modifier: Modifier,
     newNote: Boolean,
     state: BaseDetailViewModel.State.Success,
-    onSaveNote: (
-        title: String,
-        text: String,
-        color: Long
-    ) -> Unit,
+    onSaveNote: (title: String, text: String, color: Long) -> Unit,
     onStartEditNote: () -> Unit,
     onDeleteNote: () -> Unit,
     onBack: () -> Unit
@@ -117,13 +113,11 @@ private fun Success(
                 newNote = newNote
             )
         },
-        contentWindowInsets = WindowInsets.horizontalCutout
-            .union(WindowInsets.navigationBars),
+        contentWindowInsets = WindowInsets.horizontalCutout.union(WindowInsets.navigationBars),
         containerColor = Color(0xFFFBFDFA)
     ) { paddingValues ->
         MarkDownEdit(
-            modifier = modifierMaxSize
-                .padding(paddingValues),
+            modifier = modifierMaxSize.padding(paddingValues),
             contentPadding = PaddingValues(16.dp),
             edit = state.edit,
             text = text,
@@ -161,8 +155,7 @@ private fun Loading(
             }
         )
     },
-    contentWindowInsets = WindowInsets.horizontalCutout
-        .union(WindowInsets.navigationBars)
+    contentWindowInsets = WindowInsets.horizontalCutout.union(WindowInsets.navigationBars)
 ) { paddingValues ->
     Box(
         modifier = modifierMaxSize.padding(paddingValues),
@@ -200,8 +193,7 @@ private fun Error(
             }
         )
     },
-    contentWindowInsets = WindowInsets.horizontalCutout
-        .union(WindowInsets.navigationBars)
+    contentWindowInsets = WindowInsets.horizontalCutout.union(WindowInsets.navigationBars)
 ) { paddingValues ->
     Column(
         modifier = modifierMaxSize.padding(paddingValues),
