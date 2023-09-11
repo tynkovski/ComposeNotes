@@ -36,6 +36,7 @@ import com.tynkovski.notes.presentation.components.iconButton.DefaultIconButton
 import com.tynkovski.notes.presentation.components.markdown.MarkDownEdit
 import com.tynkovski.notes.presentation.utils.ext.horizontalCutout
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 // region Reusable
 private val modifierMaxSize = Modifier.fillMaxSize()
@@ -57,7 +58,7 @@ fun BaseDetailScreen(
             onBack = controller::popBackStack
         )
 
-        BaseDetailViewModel.State.Loading -> Loading(
+        is BaseDetailViewModel.State.Loading -> Loading(
             modifier = modifier,
             onBack = controller::popBackStack
         )
@@ -69,8 +70,14 @@ fun BaseDetailScreen(
             onStartEditNote = viewModel::startEditNote,
             onDeleteNote = viewModel::deleteNote,
             onBack = controller::popBackStack,
-            newNote = viewModel.noteId.isEmpty()
+            newNote = state.noteId == null
         )
+    }
+
+    viewModel.collectSideEffect {
+        when (it) {
+            is BaseDetailViewModel.SideEffect.NavigateBack -> controller.popBackStack()
+        }
     }
 }
 

@@ -7,11 +7,13 @@ import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
 
 abstract class BaseDetailViewModel(
-    val noteId: String
+    noteId: String
 ) : ViewModel(),
     ContainerHost<BaseDetailViewModel.State, BaseDetailViewModel.SideEffect> {
 
-    final override val container = container<State, SideEffect>(State.Loading) {
+    final override val container = container<State, SideEffect>(
+        State.Loading(noteId.ifEmpty { null })
+    ) {
         getNote()
     }
 
@@ -28,29 +30,26 @@ abstract class BaseDetailViewModel(
     abstract fun deleteNote(): Job
 
     sealed interface State {
+        val noteId: String?
 
-        object Loading : State
+        data class Loading(override val noteId: String?) : State
 
         data class Success(
             val title: String,
             val text: String,
             val color: Long,
-            val edit: Boolean
+            val edit: Boolean,
+            override val noteId: String?
         ) : State
 
         data class Error(
-            val error: ErrorException
+            val error: ErrorException,
+            override val noteId: String?
         ) : State
     }
 
     interface SideEffect {
         object NavigateBack : SideEffect
-
-        data class LoadNote(
-            val title: String,
-            val text: String,
-            val color: Long
-        ) : SideEffect
     }
 }
 

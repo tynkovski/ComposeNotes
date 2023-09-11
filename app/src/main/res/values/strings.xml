@@ -69,9 +69,9 @@
 
     <string name="note_title_create_date">created</string>
     <string name="note_title_update_date">updated</string>
-
     <string name="note_title_delete">Delete selected notes?</string>
     <string name="note_title_delete_confirm">Delete</string>
+
     <string name="note_title_delete_cancel">Cancel</string>
 
     <!--Core-->
@@ -95,6 +95,9 @@
 
     <!--Settings-->
     <string name="profile_screen_get_user_error">Getting user error</string>
-    <string name="profile_screen_title_user_login">Login</string>
-    <string name="profile_screen_title_user_name">Name</string>
+
+    <string name="profile_screen_title_user_login">login</string>
+    <string name="profile_screen_title_user_name">name</string>
+    <string name="profile_screen_title_user_password">password</string>
+    <string name="profile_screen_edit_field">Edit</string>
 </resources>

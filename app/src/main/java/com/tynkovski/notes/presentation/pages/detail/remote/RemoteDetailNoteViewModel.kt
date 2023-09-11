@@ -7,6 +7,7 @@ import com.tynkovski.notes.data.remote.repositories.NoteRepository
 import com.tynkovski.notes.presentation.pages.detail.compontents.BaseDetailViewModel
 import kotlinx.coroutines.flow.collect
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 
 class RemoteDetailNoteViewModel(
@@ -15,28 +16,31 @@ class RemoteDetailNoteViewModel(
 ) : BaseDetailViewModel(noteId) {
 
     override fun getNote() = intent {
-        if (noteId.isNotEmpty()) {
-            notesRepository.getNote(noteId).onLoading {
-                reduce { State.Loading }
-            }.onSuccess {
-                reduce {
-                    State.Success(
-                        title = it.title ?: "",
-                        text = it.text,
-                        color = it.color ?: -1,
-                        edit = false
-                    )
-                }
-            }.onError {
-                reduce { State.Error(it) }
-            }.collect()
-        } else {
+        state.noteId?.let { noteId ->
+            notesRepository.getNote(noteId)
+                .onLoading {
+                    reduce { State.Loading(noteId) }
+                }.onSuccess {
+                    reduce {
+                        State.Success(
+                            title = it.title ?: "",
+                            text = it.text,
+                            color = it.color ?: -1,
+                            edit = false,
+                            noteId = noteId
+                        )
+                    }
+                }.onError {
+                    reduce { State.Error(it, noteId) }
+                }.collect()
+        } ?: run {
             reduce {
                 State.Success(
                     title = "",
                     text = "",
                     color = -1,
-                    edit = true
+                    edit = true,
+                    noteId = null
                 )
             }
         }
@@ -52,20 +56,18 @@ class RemoteDetailNoteViewModel(
         text: String,
         color: Long
     ) = intent {
-        val flow = if (noteId.isEmpty()) {
-            notesRepository.createNote(
-                title = title,
-                text = text,
-                color = color
-            )
-        } else {
+        val flow = state.noteId?.let { noteId ->
             notesRepository.updateNote(
                 noteId = noteId,
                 title = title,
                 text = text,
                 color = color
             )
-        }
+        } ?: notesRepository.createNote(
+            title = title,
+            text = text,
+            color = color
+        )
 
         flow.onSuccess {
             reduce {
@@ -73,16 +75,21 @@ class RemoteDetailNoteViewModel(
                     title = title,
                     text = text,
                     color = color,
-                    edit = false
+                    edit = false,
+                    noteId = it.id
                 )
             }
         }.onError {
-            reduce { State.Error(it) }
+            reduce { State.Error(it, null) }
         }.collect()
     }
 
     override fun deleteNote() = intent {
-                notesRepository.deleteNote(noteId)
+        state.noteId?.let { noteId ->
+            notesRepository.deleteNote(noteId)
+                .onSuccess {
+                    postSideEffect(SideEffect.NavigateBack)
+                }.collect()
+        }
     }
-
 }
