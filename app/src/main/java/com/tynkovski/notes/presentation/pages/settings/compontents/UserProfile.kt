@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.tynkovski.notes.R
 import com.tynkovski.notes.data.remote.models.ErrorException
 import com.tynkovski.notes.presentation.components.button.DefaultButton
+import com.tynkovski.notes.presentation.components.shimmer.DefaultShimmer
 import com.tynkovski.notes.presentation.utils.ext.normal
 
 @Composable
@@ -94,20 +96,11 @@ private fun UserBlock(
 fun UserProfileLoading(
     modifier: Modifier,
     shape: RoundedCornerShape,
-) = Card(
-    modifier = modifier,
-    shape = shape,
-    colors = CardDefaults.elevatedCardColors(
-        containerColor = MaterialTheme.colorScheme.surfaceVariant
-    )
-) {
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator()
-    }
-}
+) = DefaultShimmer(
+    modifier = modifier.height(112.dp),
+    color = MaterialTheme.colorScheme.secondary,
+    shape = shape
+)
 
 @Composable
 fun UserProfileError(
