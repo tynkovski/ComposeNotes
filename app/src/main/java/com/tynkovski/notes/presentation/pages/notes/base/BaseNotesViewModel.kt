@@ -1,4 +1,4 @@
-package com.tynkovski.notes.presentation.pages.notes.compontents
+package com.tynkovski.notes.presentation.pages.notes.base
 
 import androidx.lifecycle.ViewModel
 import com.tynkovski.notes.data.remote.models.ErrorException
@@ -10,6 +10,7 @@ import org.orbitmvi.orbit.viewmodel.container
 
 abstract class BaseNotesViewModel : ViewModel(),
     ContainerHost<BaseNotesViewModel.State, BaseNotesViewModel.SideEffect> {
+
     protected val defaultSort = NoteSort.ByDate(false)
 
     final override val container = container<State, SideEffect>(

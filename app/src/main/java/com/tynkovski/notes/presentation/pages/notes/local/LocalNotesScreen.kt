@@ -1,11 +1,11 @@
 package com.tynkovski.notes.presentation.pages.notes.local
 
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.tynkovski.notes.presentation.pages.notes.compontents.BaseNotesScreen
+import com.tynkovski.notes.presentation.pages.notes.base.BaseNotesViewModel
+import com.tynkovski.notes.presentation.pages.notes.remote.RemoteNotesViewModel
 import kotlinx.coroutines.CoroutineScope
 import org.koin.androidx.compose.getViewModel
 
@@ -15,10 +15,7 @@ fun LocalNotesScreen(
     coroutineScope: CoroutineScope,
     drawerState: DrawerState,
     modifier: Modifier,
-) = BaseNotesScreen(
-    viewModel = getViewModel<LocalNotesViewModel>(),
-    modifier = modifier,
-    controller = controller,
-    coroutineScope = coroutineScope,
-    drawerState = drawerState
-)
+    viewModel: BaseNotesViewModel = getViewModel<LocalNotesViewModel>(),
+) {
+
+}

@@ -28,6 +28,7 @@ import com.tynkovski.notes.presentation.components.anim.AnimatedFade
 import com.tynkovski.notes.presentation.components.anim.AnimatedScale
 import com.tynkovski.notes.presentation.components.iconButton.DefaultIconButton
 import com.tynkovski.notes.presentation.components.topBar.AnimatedSelectTopBar
+import com.tynkovski.notes.presentation.pages.notes.base.BaseNotesViewModel
 import com.tynkovski.notes.presentation.utils.ext.horizontalCutout
 import com.tynkovski.notes.presentation.utils.ext.horizontalNavigationBars
 
@@ -137,7 +138,7 @@ fun NotesTopBar(
                 }
 
                 is BaseNotesViewModel.State.Error -> {
-
+                    // Draw nothing
                 }
             }
         }

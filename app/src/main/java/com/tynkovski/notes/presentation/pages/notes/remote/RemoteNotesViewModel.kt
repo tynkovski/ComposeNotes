@@ -4,8 +4,7 @@ import com.tynkovski.notes.data.remote.models.onError
 import com.tynkovski.notes.data.remote.models.onLoading
 import com.tynkovski.notes.data.remote.models.onSuccess
 import com.tynkovski.notes.data.remote.repositories.NoteRepository
-import com.tynkovski.notes.presentation.pages.notes.compontents.BaseNotesViewModel
-import kotlinx.coroutines.delay
+import com.tynkovski.notes.presentation.pages.notes.base.BaseNotesViewModel
 import kotlinx.coroutines.flow.collect
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect

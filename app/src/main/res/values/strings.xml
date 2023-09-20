@@ -60,8 +60,8 @@
 
     <!--Notes Screen-->
     <string name="notes_title">Notes</string>
-    <string name="remote_notes_title">Remote Notes</string>
-    <string name="local_notes_title">Local Notes</string>
+    <string name="remote_notes_title">Notes</string>
+    <string name="local_notes_title">Notes</string>
     <string name="notes_loading_title">Loading notes from server</string>
     <string name="notes_empty_title">You have no notes</string>
     <string name="notes_empty_description">You can create them</string>
