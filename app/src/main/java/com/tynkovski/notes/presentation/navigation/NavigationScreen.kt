@@ -10,9 +10,8 @@ object SignInScreen : NavigationScreen("signIn")
 
 object SignUpScreen : NavigationScreen("signUp")
 
-object DetailNoteScreen : NavigationScreen("detail?noteId={noteId}") {
-
-    fun route(noteId: String) = "detail?${argument.name}=$noteId"
+object RemoteDetailNoteScreen : NavigationScreen("remoteDetail?noteId={noteId}") {
+    fun route(noteId: String) = "remoteDetail?${argument.name}=$noteId"
 
     val argument: NamedNavArgument = navArgument(name = "noteId") {
         nullable = false
@@ -20,8 +19,4 @@ object DetailNoteScreen : NavigationScreen("detail?noteId={noteId}") {
     }
 }
 
-object NotesScreen : NavigationScreen("notes")
-
-object SettingsScreen : NavigationScreen("settings")
-
-object SearchScreen : NavigationScreen("search")
+object NewRemoteNoteScreen : NavigationScreen("newRemoteNote")

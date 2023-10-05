@@ -26,6 +26,7 @@ fun DefaultIconButton(
     shape: Shape = CircleShape,
     ignoreMinimumTouch: Boolean = false,
     imageOffset: Dp = 0.dp,
+    contentDescription: String? = null
 ) = DisableMinimumTouch(ignoreMinimumTouch) {
     FilledTonalIconButton(
         modifier = modifier,
@@ -41,7 +42,7 @@ fun DefaultIconButton(
                 .offset(x = imageOffset),
             imageVector = imageVector,
             tint = iconTint,
-            contentDescription = null // todo add description
+            contentDescription = contentDescription
         )
     }
 }

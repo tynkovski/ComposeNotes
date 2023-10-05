@@ -1,5 +1,7 @@
 package com.tynkovski.notes.di
 
+import com.tynkovski.notes.data.local.holders.TokenHolder
+import com.tynkovski.notes.data.remote.interceptors.TokenInterceptor
 import com.tynkovski.notes.data.remote.logging.PRETTY
 import com.tynkovski.notes.data.remote.urlProviders.UrlProviderImpl
 import com.tynkovski.notes.data.remote.urlProviders.UrlProvider
@@ -67,9 +69,9 @@ val clientModule = module {
 
     single<HttpClient>(named(REST_BASE)) {
         HttpClient(OkHttp) {
-            // engine {
-            //     addInterceptor(InterceptorExample(get()))
-            // }
+             engine {
+                 addInterceptor(TokenInterceptor(get<TokenHolder>()))
+             }
 
             install(Logging) {
                 level = LogLevel.ALL

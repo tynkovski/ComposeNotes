@@ -12,6 +12,8 @@ fun noteMapper(entity: NoteEntity): Note = Note(
     updatedAt = entity.updatedAt
 )
 
+fun noteMapper(entities: List<NoteEntity>): List<Note> = entities.map(::noteMapper)
+
 fun noteMapper(note: Note): NoteEntity = NoteEntity(
     id = note.id,
     text = note.text,

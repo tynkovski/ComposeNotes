@@ -2,6 +2,7 @@ package com.tynkovski.notes.data.remote.services
 
 import com.tynkovski.notes.data.remote.models.NetResult
 import com.tynkovski.notes.data.remote.models.toNetResult
+import com.tynkovski.notes.data.remote.requests.IdsRequest
 import com.tynkovski.notes.data.remote.requests.NoteRequest
 import com.tynkovski.notes.data.remote.responses.NoteResponse
 import com.tynkovski.notes.data.remote.responses.NotesResponse
@@ -24,7 +25,9 @@ interface NoteApi {
 
     suspend fun getNote(id: String): NetResult<NoteResponse>
 
-    suspend fun deleteNote(id: String): NetResult<NoteResponse>
+    suspend fun deleteNote(id: String): NetResult<Unit>
+
+    suspend fun deleteNotes(ids: List<String>): NetResult<Unit>
 
     suspend fun createNote(
         text: String,
@@ -33,6 +36,7 @@ interface NoteApi {
     ): NetResult<NoteResponse>
 
     suspend fun updateNote(
+        noteId: String,
         text: String,
         title: String,
         color: Long,
@@ -68,10 +72,16 @@ class NoteApiImpl(
         }.toNetResult<NoteResponse>()
     }
 
-    override suspend fun deleteNote(id: String): NetResult<NoteResponse> {
+    override suspend fun deleteNote(id: String): NetResult<Unit> {
         return client.delete("/note/delete") {
             parameter("id", id)
-        }.toNetResult<NoteResponse>()
+        }.toNetResult<Unit>()
+    }
+
+    override suspend fun deleteNotes(ids: List<String>): NetResult<Unit> {
+        return client.delete("/notes/delete") {
+            setBody(IdsRequest(ids = ids))
+        }.toNetResult<Unit>()
     }
 
     override suspend fun createNote(
@@ -85,11 +95,13 @@ class NoteApiImpl(
     }
 
     override suspend fun updateNote(
+        noteId: String,
         text: String,
         title: String,
         color: Long,
     ): NetResult<NoteResponse> {
         return client.put("/note/update") {
+            parameter("id", noteId)
             setBody(NoteRequest(text, title, color))
         }.toNetResult<NoteResponse>()
     }

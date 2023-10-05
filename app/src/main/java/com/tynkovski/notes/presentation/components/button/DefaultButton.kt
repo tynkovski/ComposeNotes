@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -19,7 +20,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.tynkovski.notes.presentation.components.helpers.DisableMinimumTouch
-import com.tynkovski.notes.presentation.components.indicator.SpinningCircleProgressIndicator
 import com.tynkovski.notes.presentation.theme.typography.defaultTypography
 
 enum class ButtonState {
@@ -27,7 +27,7 @@ enum class ButtonState {
 }
 
 @Composable
-fun buttonColors(state: ButtonState) = when(state) {
+fun buttonColors(state: ButtonState) = when (state) {
     ButtonState.Loading -> ButtonDefaults.buttonColors()
     ButtonState.Success -> ButtonDefaults.buttonColors()
     ButtonState.Error -> ButtonDefaults.buttonColors(
@@ -37,9 +37,9 @@ fun buttonColors(state: ButtonState) = when(state) {
 
 @Composable
 fun DefaultButton(
-    modifier: Modifier,
     onClick: () -> Unit,
     text: String,
+    modifier: Modifier = Modifier,
     textStyle: TextStyle = defaultTypography.labelMedium,
     textAlign: TextAlign = TextAlign.Center,
     shape: CornerBasedShape = MaterialTheme.shapes.large,
@@ -59,10 +59,12 @@ fun DefaultButton(
         contentPadding = contentPadding,
         colors = colors,
     ) {
-        when(state) {
+        when (state) {
             ButtonState.Loading -> {
-                SpinningCircleProgressIndicator(durationMillis = 800)
+                CircularProgressIndicator()
+                //SpinningCircleProgressIndicator(durationMillis = 800)
             }
+
             ButtonState.Success -> {
                 leadingIcon?.let {
                     Icon(
@@ -89,7 +91,17 @@ fun DefaultButton(
                     )
                 }
             }
+
             ButtonState.Error -> {
+                leadingIcon?.let {
+                    Icon(
+                        modifier = Modifier,
+                        imageVector = it,
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
+
                 Text(
                     modifier = Modifier,
                     text = text,
@@ -102,7 +114,7 @@ fun DefaultButton(
 }
 
 @Composable
-fun outlinedButtonColors(state: ButtonState) = when(state) {
+fun outlinedButtonColors(state: ButtonState) = when (state) {
     ButtonState.Loading -> ButtonDefaults.outlinedButtonColors()
     ButtonState.Success -> ButtonDefaults.outlinedButtonColors()
     ButtonState.Error -> ButtonDefaults.outlinedButtonColors(
@@ -111,7 +123,7 @@ fun outlinedButtonColors(state: ButtonState) = when(state) {
 }
 
 @Composable
-fun outlinedButtonBorder(state: ButtonState) = when(state) {
+fun outlinedButtonBorder(state: ButtonState) = when (state) {
     ButtonState.Loading -> ButtonDefaults.outlinedButtonBorder
     ButtonState.Success -> ButtonDefaults.outlinedButtonBorder
     ButtonState.Error -> ButtonDefaults.outlinedButtonBorder.copy(
@@ -144,10 +156,12 @@ fun DefaultOutlinedButton(
         colors = colors,
         border = outlinedButtonBorder(state),
     ) {
-        when(state) {
+        when (state) {
             ButtonState.Loading -> {
-                SpinningCircleProgressIndicator(durationMillis = 800)
+                CircularProgressIndicator()
+                // SpinningCircleProgressIndicator(durationMillis = 800)
             }
+
             ButtonState.Success -> {
                 leadingIcon?.let {
                     Icon(
@@ -174,6 +188,7 @@ fun DefaultOutlinedButton(
                     )
                 }
             }
+
             ButtonState.Error -> {
                 Text(
                     modifier = Modifier,

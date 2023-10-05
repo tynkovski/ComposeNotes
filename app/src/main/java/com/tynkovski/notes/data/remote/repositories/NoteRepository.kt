@@ -1,6 +1,7 @@
 package com.tynkovski.notes.data.remote.repositories
 
 import com.tynkovski.notes.data.remote.mappers.noteMapper
+import com.tynkovski.notes.data.remote.mappers.unitMapper
 import com.tynkovski.notes.data.remote.models.LocalResult
 import com.tynkovski.notes.data.remote.models.toResult
 import com.tynkovski.notes.data.remote.services.NoteApi
@@ -15,7 +16,9 @@ interface NoteRepository {
 
     suspend fun getNote(id: String): Flow<LocalResult<Note>>
 
-    suspend fun deleteNote(id: String): Flow<LocalResult<Note>>
+    suspend fun deleteNote(id: String): Flow<LocalResult<Unit>>
+
+    suspend fun deleteNotes(ids: List<String>): Flow<LocalResult<Unit>>
 
     suspend fun createNote(
         text: String,
@@ -24,6 +27,7 @@ interface NoteRepository {
     ): Flow<LocalResult<Note>>
 
     suspend fun updateNote(
+        noteId: String,
         text: String,
         title: String,
         color: Long
@@ -45,10 +49,16 @@ class NoteRepositoryImpl(
         }.toResult(::noteMapper)
     }
 
-    override suspend fun deleteNote(id: String): Flow<LocalResult<Note>> {
+    override suspend fun deleteNote(id: String): Flow<LocalResult<Unit>> {
         return flow {
             emit(api.deleteNote(id))
-        }.toResult(::noteMapper)
+        }.toResult(::unitMapper)
+    }
+
+    override suspend fun deleteNotes(ids: List<String>): Flow<LocalResult<Unit>> {
+        return flow {
+            emit(api.deleteNotes(ids))
+        }.toResult(::unitMapper)
     }
 
     override suspend fun createNote(
@@ -62,12 +72,13 @@ class NoteRepositoryImpl(
     }
 
     override suspend fun updateNote(
+        noteId: String,
         text: String,
         title: String,
         color: Long,
     ): Flow<LocalResult<Note>> {
         return flow {
-            emit(api.updateNote(text, title, color))
+            emit(api.updateNote(noteId, text, title, color))
         }.toResult(::noteMapper)
     }
 }
