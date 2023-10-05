@@ -38,16 +38,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.tynkovski.notes.R
 import com.tynkovski.notes.presentation.navigation.DrawerNavigation
-import com.tynkovski.notes.presentation.navigation.LocalDetailNoteScreen
-import com.tynkovski.notes.presentation.navigation.LocalNotesScreen
-import com.tynkovski.notes.presentation.navigation.NewLocalNoteScreen
 import com.tynkovski.notes.presentation.navigation.NewRemoteNoteScreen
 import com.tynkovski.notes.presentation.navigation.RemoteDetailNoteScreen
 import com.tynkovski.notes.presentation.navigation.RemoteNotesScreen
 import com.tynkovski.notes.presentation.navigation.SettingsScreen
-import com.tynkovski.notes.presentation.pages.detail.local.LocalDetailNoteScreen
 import com.tynkovski.notes.presentation.pages.detail.remote.RemoteDetailNoteScreen
-import com.tynkovski.notes.presentation.pages.notes.local.LocalNotesScreen
 import com.tynkovski.notes.presentation.pages.notes.remote.RemoteNotesScreen
 import com.tynkovski.notes.presentation.pages.settings.screen.SettingsScreen
 import com.tynkovski.notes.presentation.utils.ext.empty
@@ -111,15 +106,6 @@ fun MainScreen(
                     )
                 }
 
-                composable(LocalNotesScreen.route) {
-                    LocalNotesScreen(
-                        controller = navController,
-                        modifier = paddingModifier,
-                        coroutineScope = coroutineScope,
-                        drawerState = drawerState
-                    )
-                }
-
                 composable(SettingsScreen.route) {
                     SettingsScreen(
                         controller = navController,
@@ -138,14 +124,6 @@ fun MainScreen(
                     )
                 }
 
-                composable(NewLocalNoteScreen.route) {
-                    LocalDetailNoteScreen(
-                        controller = navController,
-                        modifier = paddingModifier,
-                        noteId = ""
-                    )
-                }
-
                 composable(
                     RemoteDetailNoteScreen.route,
                     arguments = listOf(RemoteDetailNoteScreen.argument)
@@ -155,21 +133,6 @@ fun MainScreen(
                         ?: error("invalid ${RemoteDetailNoteScreen.argument.name}")
 
                     RemoteDetailNoteScreen(
-                        controller = navController,
-                        modifier = paddingModifier,
-                        noteId = noteId
-                    )
-                }
-
-                composable(
-                    LocalDetailNoteScreen.route,
-                    arguments = listOf(LocalDetailNoteScreen.argument)
-                ) { backStackEntry ->
-                    val noteId = backStackEntry.arguments
-                        ?.getString(LocalDetailNoteScreen.argument.name)
-                        ?: error("invalid ${LocalDetailNoteScreen.argument.name}")
-
-                    LocalDetailNoteScreen(
                         controller = navController,
                         modifier = paddingModifier,
                         noteId = noteId

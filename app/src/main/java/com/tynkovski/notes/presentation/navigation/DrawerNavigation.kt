@@ -12,7 +12,7 @@ abstract class DrawerNavigation(
     route = route,
 ) {
     companion object {
-        val drawerScreens = listOf(RemoteNotesScreen, LocalNotesScreen, SettingsScreen)
+        val drawerScreens = listOf(RemoteNotesScreen, SettingsScreen)
 
         fun getFromRoute(route: String?): DrawerNavigation? {
             return drawerScreens.find { it.route == route }
@@ -24,12 +24,6 @@ object RemoteNotesScreen : DrawerNavigation(
     route = "remoteNotes",
     image = R.drawable.ic_text_snipped,
     title = R.string.remote_notes_title,
-)
-
-object LocalNotesScreen : DrawerNavigation(
-    route = "localNotes",
-    image = R.drawable.ic_note,
-    title = R.string.local_notes_title,
 )
 
 object SettingsScreen : DrawerNavigation(

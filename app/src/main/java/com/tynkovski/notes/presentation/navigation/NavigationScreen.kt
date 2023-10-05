@@ -19,16 +19,4 @@ object RemoteDetailNoteScreen : NavigationScreen("remoteDetail?noteId={noteId}")
     }
 }
 
-object LocalDetailNoteScreen : NavigationScreen("localDetail?noteId={noteId}") {
-    fun route(noteId: String) = "localDetail?${argument.name}=$noteId"
-
-    val argument: NamedNavArgument = navArgument(name = "noteId") {
-        nullable = false
-        type = NavType.StringType
-    }
-}
-
-
 object NewRemoteNoteScreen : NavigationScreen("newRemoteNote")
-
-object NewLocalNoteScreen : NavigationScreen("newLocalNote")
