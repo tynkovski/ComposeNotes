@@ -1,6 +1,16 @@
 Notes
 =============
 
+Simple client-server notes application. 
+
+Project Stack
+* Kotlin
+* Coroutines & Flow
+* Jetpack Compose
+* Orbit MVI
+* Ktor
+* Koin
+
 # Login screen
 
 ![login screen 1](https://github.com/tynkovski/ComposeNotes/blob/master/img/login_1.jpg)
