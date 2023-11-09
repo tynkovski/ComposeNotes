@@ -2,4 +2,4 @@
 
 =============
 
-![login screen](https://github.com/tynkovski/Notes/blob/main/img/login_1)
+![login screen](https://github.com/tynkovski/Notes/blob/master/img/login_1)
