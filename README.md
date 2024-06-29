@@ -18,7 +18,11 @@ Project Stack
 
 # Register screen
 
-![register screen 1](https://github.com/tynkovski/ComposeNotes/blob/master/img/register_1.jpg) ![register screen 2](https://github.com/tynkovski/ComposeNotes/blob/master/img/register_2.jpg) ![register screen 3](https://github.com/tynkovski/ComposeNotes/blob/master/img/register_3.jpg)
+<p>
+    <img src="https://github.com/tynkovski/ComposeNotes/blob/master/img/register_1.jpg" >
+    <img src="https://github.com/tynkovski/ComposeNotes/blob/master/img/register_2.jpg" >
+    <img src="https://github.com/tynkovski/ComposeNotes/blob/master/img/register_3.jpg" >
+</p>
 
 # Notes screen
 ![notes screen 1](https://github.com/tynkovski/ComposeNotes/blob/master/img/notes_list.jpg) ![notes screen 2](https://github.com/tynkovski/ComposeNotes/blob/master/img/notes_empty.jpg) ![notes screen 3](https://github.com/tynkovski/ComposeNotes/blob/master/img/notes_delete.jpg)
